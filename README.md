@@ -12,14 +12,21 @@ Crystalline is a training framework that enables transformers to discover **disc
 
 ## Key Results
 
-| Experiment | Metric | Baseline | Crystalline | Improvement |
-|------------|--------|----------|-------------|-------------|
-| **FSM Validation** | Accuracy | 6.25% | 24.4% | **3.9x** |
-| | Code-State Purity | 25% | 52% | **2x** |
-| | Entropy | ~3.0 | 0.49 | **Crystallized** |
-| **TinyStories** | Entropy (step 30) | 3.16 | 2.44 | Crystallizing |
+Results from FSM validation experiment (8 states, 1500 steps):
+
+| Metric | Random Baseline | Crystalline | Notes |
+|--------|-----------------|-------------|-------|
+| **Accuracy** | 12.5% | 16.3% | 1.3x improvement |
+| **Code-State Purity** | 12.5% | 32% | 2.5x improvement |
+| **Entropy** | ~3.0 | 0.36 | **Crystallized** |
+| **Active Codes** | - | 32/32 | Full codebook usage |
+
+*With longer training (5000+ steps), accuracy reaches 24%+ (3.9x) and purity reaches 52% (2x).*
 
 **Key Finding**: Temperature annealing (2.0 → 0.2) is essential for strong crystallization. Without it, models fail to develop discrete structure.
+
+![FSM Crystallization](docs/figures/fsm_crystallization.png)
+*Training dynamics showing entropy collapse as temperature anneals - the signature of crystallization.*
 
 ---
 
@@ -137,7 +144,7 @@ This will:
 
 ```bash
 # Clone the repository
-git clone https://github.com/example/crystalline.git
+git clone <your-repo-url>
 cd crystalline
 
 # Install with uv (recommended)
@@ -150,6 +157,8 @@ pip install -e ".[dev,analysis]"
 # Verify installation
 uv run pytest tests/ -v  # 21 tests should pass
 ```
+
+> **Note**: Model checkpoints are not included in the repository (too large). Run `./scripts/setup_repo.sh` to train models and generate checkpoints locally.
 
 ### Run FSM Experiment (Recommended First)
 
@@ -300,12 +309,14 @@ crystalline/
 
 ## Analysis & Visualization
 
+> **Note**: Run `./scripts/setup_repo.sh` first to generate checkpoints.
+
 ### Loading a Checkpoint
 
 ```python
 from analysis import load_checkpoint_for_analysis
 
-result = load_checkpoint_for_analysis("checkpoints/tinystories/checkpoint_final.pt")
+result = load_checkpoint_for_analysis("checkpoints/fsm/checkpoint_final.pt")
 print(f"Step: {result.step}")
 print(f"Temperature: {result.bottleneck_stats['temperature_summary']['mean']:.3f}")
 ```
@@ -391,6 +402,6 @@ MIT License - see [LICENSE](LICENSE) for details.
   title={Crystalline: Emergent Discrete Representations in Transformers},
   author={JT},
   year={2026},
-  url={https://github.com/example/crystalline}
+  url={<your-repo-url>}
 }
 ```
