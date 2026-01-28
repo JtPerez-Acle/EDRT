@@ -1,0 +1,47 @@
+# TinyStories Small Config
+# For local GPU development (~20M params)
+# Estimated time: ~2 hours on RTX 3080 for 10000 steps
+
+model:
+  vocab_size: 50257  # GPT-2 tokenizer
+  dim: 256
+  n_layers: 6
+  n_heads: 8
+  max_seq_len: 512
+  dropout: 0.1
+
+bottleneck:
+  codebook_size: 512
+  num_codes_k: 16
+  temp_init: 2.0
+  temp_min: 0.1
+
+training:
+  batch_size: 32
+  gradient_accumulation_steps: 2  # Effective batch size: 64
+  max_steps: 20000
+  learning_rate: 0.0003
+  warmup_steps: 2000
+  weight_decay: 0.01
+
+  # Crystallization losses
+  lambda_compress: 0.01
+  lambda_commit: 0.25
+
+  # Temperature annealing
+  temp_anneal: true
+  temp_start: 2.0
+  temp_end: 0.3
+
+  # Logging
+  log_every: 100
+  eval_every: 1000
+  save_every: 5000
+
+data:
+  dataset_name: roneneldan/TinyStories
+  tokenizer_name: gpt2
+  max_seq_len: 512
+  pack_sequences: true
+  num_workers: 4
+  val_split_size: 2000

@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-01-27T22:19:52.912122",
+  "experiments": {
+    "fsm": {
+      "accuracy": 0.16290283203125,
+      "purity": 0.31968480348587036,
+      "entropy": 0.3619885543982188,
+      "improvement_over_random": 1.30322265625,
+      "steps": 21
+    }
+  }
+}
